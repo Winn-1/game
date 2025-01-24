@@ -2,19 +2,19 @@
 import { ref, onUnmounted } from 'vue'
 
 // 音效资源
-const chickenSound = new Audio('/src/assets/sounds/鸡叫.mp3')
-const chickSound = new Audio('/src/assets/sounds/小鸡叫.mp3')
-const cowSound = new Audio('/src/assets/sounds/牛叫.mp3')
-const horseSound = new Audio('/src/assets/sounds/马叫声.mp3')
-const brownGoatSound = new Audio('/src/assets/sounds/棕色的羊叫.mp3')
-const donkeySound = new Audio('/src/assets/sounds/驴叫.mp3')
-const sheepSound = new Audio('/src/assets/sounds/绵羊叫.mp3')
-const gooseSound = new Audio('/src/assets/sounds/鹅叫.mp3')
-const goatSound = new Audio('/src/assets/sounds/山羊叫.mp3')
-const failSound = new Audio('/src/assets/sounds/失败.mp3')
+const chickenSound = new Audio('/src/assets/sounds/chicken_sound.mp3')
+const chickSound = new Audio('/src/assets/sounds/chick_sound.mp3')
+const cowSound = new Audio('/src/assets/sounds/cow_sound.mp3')
+const horseSound = new Audio('/src/assets/sounds/horse_sound.mp3')
+const brownGoatSound = new Audio('/src/assets/sounds/brown_goat_sound.mp3')
+const donkeySound = new Audio('/src/assets/sounds/donkey_sound.mp3')
+const sheepSound = new Audio('/src/assets/sounds/sheep_sound.mp3')
+const gooseSound = new Audio('/src/assets/sounds/goose_sound.mp3')
+const goatSound = new Audio('/src/assets/sounds/goat_sound.mp3')
+const failSound = new Audio('/src/assets/sounds/fail_sound.mp3')
 
 // 按钮音效
-const buttonClickSound = new Audio('/src/assets/sounds/按钮点击.mp3')
+const buttonClickSound = new Audio('/src/assets/sounds/button_click.mp3')
 buttonClickSound.volume = 0.5
 
 // 播放按钮音效的函数
@@ -277,43 +277,40 @@ const checkMatch = () => {
         
         // 根据动物类型播放对应音效
         if (type === 'chicken') {
-          chickenSound.currentTime = 0; // 重置音频播放位置
-          chickenSound.playbackRate = 1.5; // 设置播放速度为1.5倍
+          chickenSound.currentTime = 0;
+          chickenSound.playbackRate = 1.5;
           chickenSound.play();
         } else if (type === 'cow') {
-          cowSound.currentTime = 0; // 重置音频播放位置
-          cowSound.playbackRate = 2.0; // 设置播放速度为2.0倍
+          cowSound.currentTime = 0;
+          cowSound.playbackRate = 2.0;
           cowSound.play();
         } else if (type === 'horse') {
-          horseSound.currentTime = 0; // 重置音频播放位置
-          horseSound.playbackRate = 2.0; // 设置播放速度为2.0倍
+          horseSound.currentTime = 0;
+          horseSound.playbackRate = 2.0;
           horseSound.play();
         } else if (type === 'brown_goat') {
-          brownGoatSound.currentTime = 0; // 重置音频播放位置
+          brownGoatSound.currentTime = 0;
+          brownGoatSound.playbackRate = 1.5;
           brownGoatSound.play();
         } else if (type === 'donkey') {
-          donkeySound.currentTime = 0; // 重置音频播放位置
-          donkeySound.playbackRate = 2.0; // 设置播放速度为2.0倍
+          donkeySound.currentTime = 0;
+          donkeySound.playbackRate = 2.0;
           donkeySound.play();
         } else if (type === 'goose') {
-          gooseSound.currentTime = 0; // 重置音频播放位置
-          gooseSound.playbackRate = 1.5; // 设置播放速度为1.5倍
+          gooseSound.currentTime = 0;
+          gooseSound.playbackRate = 1.5;
           gooseSound.play();
         } else if (type === 'goat') {
-          goatSound.currentTime = 0; // 重置音频播放位置
-          goatSound.playbackRate = 1.5; // 设置播放速度为1.5倍
-          goatSound.play();
-        } else if (type === 'goat') {
-          goatSound.currentTime = 0; // 重置音频播放位置
-          goatSound.playbackRate = 1.5; // 设置播放速度为1.5倍
+          goatSound.currentTime = 0;
+          goatSound.playbackRate = 1.5;
           goatSound.play();
         } else if (type === 'sheep') {
-          sheepSound.currentTime = 0; // 重置音频播放位置
-          sheepSound.playbackRate = 1.5; // 设置播放速度为1.5倍
+          sheepSound.currentTime = 0;
+          sheepSound.playbackRate = 1.5;
           sheepSound.play();
         } else if (type === 'chick') {
-          chickSound.currentTime = 0; // 重置音频播放位置
-          chickSound.playbackRate = 2.0; // 设置播放速度为2.0倍
+          chickSound.currentTime = 0;
+          chickSound.playbackRate = 2.0;
           chickSound.play();
         }
         
