@@ -3,10 +3,25 @@ import { ref, onUnmounted } from 'vue'
 
 // 音效资源
 const chickenSound = new Audio('/src/assets/sounds/鸡叫.mp3')
+const chickSound = new Audio('/src/assets/sounds/小鸡叫.mp3')
 const cowSound = new Audio('/src/assets/sounds/牛叫.mp3')
 const horseSound = new Audio('/src/assets/sounds/马叫声.mp3')
 const brownGoatSound = new Audio('/src/assets/sounds/棕色的羊叫.mp3')
 const donkeySound = new Audio('/src/assets/sounds/驴叫.mp3')
+const sheepSound = new Audio('/src/assets/sounds/绵羊叫.mp3')
+const gooseSound = new Audio('/src/assets/sounds/鹅叫.mp3')
+const goatSound = new Audio('/src/assets/sounds/山羊叫.mp3')
+const failSound = new Audio('/src/assets/sounds/失败.mp3')
+
+// 按钮音效
+const buttonClickSound = new Audio('/src/assets/sounds/按钮点击.mp3')
+buttonClickSound.volume = 0.5
+
+// 播放按钮音效的函数
+const playButtonSound = () => {
+  buttonClickSound.currentTime = 0
+  buttonClickSound.play()
+}
 
 // 图片样式配置
 
@@ -45,7 +60,7 @@ const animals = ref<Array<{ id: number; type: string; x: number; y: number; visi
 const isAnimalCovered = (targetAnimal: { x: number; y: number; zIndex: number }) => {
   const VISIBLE_THRESHOLD = 0.1; // 当动物被遮挡超过90%面积时判定为不可选中
   let totalOverlapArea = 0;
-  const animalSize = 60;
+  const animalSize = 80;
   const animalArea = animalSize * animalSize;
 
   // 计算目标动物的边界框
@@ -280,6 +295,26 @@ const checkMatch = () => {
           donkeySound.currentTime = 0; // 重置音频播放位置
           donkeySound.playbackRate = 2.0; // 设置播放速度为2.0倍
           donkeySound.play();
+        } else if (type === 'goose') {
+          gooseSound.currentTime = 0; // 重置音频播放位置
+          gooseSound.playbackRate = 1.5; // 设置播放速度为1.5倍
+          gooseSound.play();
+        } else if (type === 'goat') {
+          goatSound.currentTime = 0; // 重置音频播放位置
+          goatSound.playbackRate = 1.5; // 设置播放速度为1.5倍
+          goatSound.play();
+        } else if (type === 'goat') {
+          goatSound.currentTime = 0; // 重置音频播放位置
+          goatSound.playbackRate = 1.5; // 设置播放速度为1.5倍
+          goatSound.play();
+        } else if (type === 'sheep') {
+          sheepSound.currentTime = 0; // 重置音频播放位置
+          sheepSound.playbackRate = 1.5; // 设置播放速度为1.5倍
+          sheepSound.play();
+        } else if (type === 'chick') {
+          chickSound.currentTime = 0; // 重置音频播放位置
+          chickSound.playbackRate = 2.0; // 设置播放速度为2.0倍
+          chickSound.play();
         }
         
         // 检查层级可见性
@@ -335,6 +370,7 @@ const checkGameOver = () => {
 
 // 开始游戏
 const startGame = () => {
+  playButtonSound()
   gameStarted.value = true
   gameOver.value = false
   timeLeft.value = 600
@@ -448,6 +484,7 @@ const initializeGame = () => {
 
 // 返回主页
 const handleReturnClick = () => {
+  playButtonSound()
   showConfirmDialog.value = true
 }
 
@@ -467,17 +504,24 @@ const resetGameState = () => {
 
 // 确认返回主页
 const returnToHome = () => {
+  playButtonSound()
   showConfirmDialog.value = false
   resetGameState()
 }
 
 // 取消返回
 const cancelReturn = () => {
+  playButtonSound()
   showConfirmDialog.value = false
 }
 
 // 结束游戏
 const endGame = (reason: 'timeout' | 'full' | 'win') => {
+  if (reason === 'timeout' || reason === 'full') {
+    failSound.currentTime = 0
+    failSound.play()
+  }
+  
   if (reason === 'win' && currentLevel.value === 1) {
     // 第一关胜利，显示过渡动画
     showLevelTransition.value = true
@@ -571,6 +615,11 @@ onUnmounted(() => {
           </template>
         </div>
       </div>
+      <div class="button-area">
+        <button class="game-btn">按钮1</button>
+        <button class="game-btn">按钮2</button>
+        <button class="game-btn">按钮3</button>
+      </div>
     </div>
 
     <!-- 游戏结束页面 -->
@@ -653,8 +702,8 @@ onUnmounted(() => {
 
 .animal {
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   background-color: transparent;
   border-radius: 12px;
   display: flex;
@@ -675,7 +724,7 @@ onUnmounted(() => {
   padding: 4px;
   height: 60px;
   position: relative;
-  transform: translateY(-100px);
+  transform: translateY(-140px);
 }
 
 .pending-slot {
@@ -697,6 +746,34 @@ onUnmounted(() => {
   height: 100%;
   object-fit: contain;
   display: block;
+}
+
+.button-area {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 4px;
+  transform: translateY(-30px);
+}
+
+.game-btn {
+  flex: 1;
+  margin: 0 2px;
+  padding: 10px 0;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px;
+  border: 2px solid #453D38;
+  background: #FFD440;
+  box-shadow: 0px 4px 2.1px 0px #FFFF92 inset, 0px 6px 0px 0px rgba(0, 0, 0, 0.13), 0px -8px 0px 0px #E48B0D inset;
+  transition: transform 0.2s;
+}
+
+.game-btn:hover {
+  transform: translateY(2px);
+  background: #FFC340;
+  box-shadow: 0px 4px 2.1px 0px #FFFF92 inset, 0px 4px 0px 0px rgba(0, 0, 0, 0.13), 0px -8px 0px 0px #E48B0D inset;
 }
 
 .start-screen {
