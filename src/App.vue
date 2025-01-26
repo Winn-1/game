@@ -2,19 +2,19 @@
 import { ref, onUnmounted } from 'vue'
 
 // 音效资源
-const chickenSound = new Audio('/src/assets/sounds/chicken_sound.mp3')
-const chickSound = new Audio('/src/assets/sounds/chick_sound.mp3')
-const cowSound = new Audio('/src/assets/sounds/cow_sound.mp3')
-const horseSound = new Audio('/src/assets/sounds/horse_sound.mp3')
-const brownGoatSound = new Audio('/src/assets/sounds/brown_goat_sound.mp3')
-const donkeySound = new Audio('/src/assets/sounds/donkey_sound.mp3')
-const sheepSound = new Audio('/src/assets/sounds/sheep_sound.mp3')
-const gooseSound = new Audio('/src/assets/sounds/goose_sound.mp3')
-const goatSound = new Audio('/src/assets/sounds/goat_sound.mp3')
-const failSound = new Audio('/src/assets/sounds/fail_sound.mp3')
+const chickenSound = new Audio('/sounds/chicken_sound.mp3')
+const chickSound = new Audio('/sounds/chick_sound.mp3')
+const cowSound = new Audio('/sounds/cow_sound.mp3')
+const horseSound = new Audio('/sounds/horse_sound.mp3')
+const brownGoatSound = new Audio('/sounds/brown_goat_sound.mp3')
+const donkeySound = new Audio('/sounds/donkey_sound.mp3')
+const sheepSound = new Audio('/sounds/sheep_sound.mp3')
+const gooseSound = new Audio('/sounds/goose_sound.mp3')
+const goatSound = new Audio('/sounds/goat_sound.mp3')
+const failSound = new Audio('/sounds/fail_sound.mp3')
 
 // 按钮音效
-const buttonClickSound = new Audio('/src/assets/sounds/button_click.mp3')
+const buttonClickSound = new Audio('/sounds/button_click.mp3')
 buttonClickSound.volume = 0.5
 
 // 播放按钮音效的函数
@@ -35,6 +35,9 @@ const showConfirmDialog = ref(false)
 const isPaused = ref(false) // 游戏暂停状态
 const currentLevel = ref(1) // 当前关卡
 const showLevelTransition = ref(false) // 关卡过渡动画
+const showSettings = ref(false) // 设置弹窗状态
+const isSoundEnabled = ref(true) // 音效开关状态
+const isBgmEnabled = ref(true) // 背景音乐开关状态
 
 // 待消除区域（最多6个格子）
 const pendingArea = ref<Array<{ id: number; type: string }>>([]);
@@ -566,9 +569,9 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="game-header">
+        <button class="settings-btn" @click="showSettings = true">设置</button>
         <div class="timer">{{ Math.floor(timeLeft / 60) }}:{{ (timeLeft % 60).toString().padStart(2, '0') }}</div>
         <button class="pause-btn" @click="isPaused = !isPaused">{{ isPaused ? '继续' : '暂停' }}</button>
-        <button class="return-btn" @click="handleReturnClick">返回主页</button>
       </div>
 
       <div class="main-area">
@@ -653,6 +656,28 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- 设置弹窗 -->
+    <div v-if="showSettings" class="confirm-dialog">
+      <div class="confirm-dialog-content settings-dialog">
+        <h3>游戏设置</h3>
+        <div class="settings-options">
+          <div class="setting-item">
+            <span>背景音乐</span>
+            <button @click="isBgmEnabled = !isBgmEnabled" :class="['toggle-btn', isBgmEnabled ? 'enabled' : '']">{{ isBgmEnabled ? '开' : '关' }}</button>
+          </div>
+          <div class="setting-item">
+            <span>音效</span>
+            <button @click="isSoundEnabled = !isSoundEnabled" :class="['toggle-btn', isSoundEnabled ? 'enabled' : '']">{{ isSoundEnabled ? '开' : '关' }}</button>
+          </div>
+        </div>
+        <div class="confirm-dialog-buttons">
+          <button @click="returnToHome" class="confirm-btn">返回主页</button>
+          <button @click="startGame" class="restart-btn">重新开始</button>
+        </div>
+        <button @click="showSettings = false" class="close-btn">×</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -721,7 +746,7 @@ onUnmounted(() => {
   padding: 4px;
   height: 60px;
   position: relative;
-  transform: translateY(-140px);
+  transform: translateY(-100px);
 }
 
 .pending-slot {
@@ -747,16 +772,18 @@ onUnmounted(() => {
 
 .button-area {
   display: flex;
-  justify-content: space-between;
-  width: 100%;
+  justify-content: center;
+  gap: 14px;
+  width: calc(100% - 8px);
   padding: 0 4px;
   transform: translateY(-30px);
+  margin: 0 auto;
 }
 
 .game-btn {
   flex: 1;
   margin: 0 2px;
-  padding: 10px 0;
+  padding: 30px 0;
   font-size: 16px;
   color: white;
   cursor: pointer;
@@ -765,6 +792,7 @@ onUnmounted(() => {
   background: #FFD440;
   box-shadow: 0px 4px 2.1px 0px #FFFF92 inset, 0px 6px 0px 0px rgba(0, 0, 0, 0.13), 0px -8px 0px 0px #E48B0D inset;
   transition: transform 0.2s;
+  width: 100px;
 }
 
 .game-btn:hover {
@@ -899,6 +927,16 @@ button:hover {
   margin-bottom: 10px;
 }
 
+.timer {
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 2px solid white;
+  border-radius: 50px;
+  padding: 8px 16px;
+  color: white;
+  font-family: 'MiSans', sans-serif;
+  font-weight: 800;
+}
+
 .pause-btn {
   padding: 8px 16px;
   font-size: 16px;
@@ -945,6 +983,83 @@ button:hover {
   border-radius: 8px;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.settings-dialog {
+  min-width: 300px;
+}
+
+.settings-dialog h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+.settings-options {
+  margin-bottom: 25px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.setting-item span {
+  font-size: 16px;
+  color: #333;
+}
+
+.toggle-btn {
+  width: 60px;
+  height: 30px;
+  padding: 0;
+  border-radius: 15px;
+  background: linear-gradient(to right, #666 50%, #42b883 50%);
+  background-size: 200% 100%;
+  background-position: right;
+  border: 2px solid #453D38;
+  position: relative;
+  cursor: pointer;
+  transition: background-position 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
+              inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.toggle-btn::before {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  background: #fff;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 2px solid #453D38;
+}
+
+.toggle-btn.enabled {
+  background-position: left;
+}
+
+.toggle-btn.enabled::before {
+  transform: translateX(30px);
+}
+
+.toggle-btn:hover {
+  filter: brightness(1.1);
+}
+
+.toggle-btn:active::before {
+  transform: scale(0.95) translateX(30px);
 }
 
 .confirm-dialog-content p {
@@ -1007,6 +1122,32 @@ button:hover {
   color: #e0e0e0;
   margin: 0;
   line-height: 1.5;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  font-size: 24px;
+  line-height: 1;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  color: #666;
+  border: 2px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background-color: #e74c3c;
+  color: white;
+  border-color: #c0392b;
 }
 
 @keyframes fadeIn {
